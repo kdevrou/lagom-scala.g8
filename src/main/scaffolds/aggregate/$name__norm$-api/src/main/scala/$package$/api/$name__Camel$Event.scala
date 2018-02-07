@@ -7,7 +7,7 @@ sealed trait $name;format="Camel"$Event {
 }
 
 object $name;format="Camel"$Event {
-  implicit val format: Format[$name;format="Camel"Event] =
+  implicit val format: Format[$name;format="Camel"$Event] =
     derived.flat.oformat((__ \ "type").format[String])
 }
 
