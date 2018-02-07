@@ -40,8 +40,8 @@ trait $name;format="Camel"$Service extends Service {
     // @formatter:off
     named("$name;format="norm"$")
       .withCalls(
-        pathCall("/api/$name;format=\"lower\"$/:id", get$name;format="Camel"$ _),
-        pathCall("/api/$name;format=\"lower\"$", make$name;format="Camel"$ _)
+        pathCall("/api/$name;format="lower"$/:id", get$name;format="Camel"$ _),
+        pathCall("/api/$name;format="lower"$", make$name;format="Camel"$ _)
       )
       .withTopics(
         topic($name;format="Camel"$Service.TOPIC_NAME, $name;format="camel"$Topic)
