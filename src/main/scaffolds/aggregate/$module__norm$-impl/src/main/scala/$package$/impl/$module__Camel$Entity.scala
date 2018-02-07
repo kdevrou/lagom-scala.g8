@@ -10,7 +10,7 @@ import play.api.libs.json.{Format, Json}
 import scala.collection.immutable.Seq
 
 /**
-  * This is an event sourced entity. It has a state, [[$name;format="Camel"$State]], which
+  * This is an event sourced entity. It has a state, [[$module;format="Camel"$State]], which
   * stores what the greeting should be (eg, "Hello").
   *
   * Event sourced entities are interacted with by sending them commands. This
@@ -28,33 +28,33 @@ import scala.collection.immutable.Seq
   * This entity defines one event, the [[GreetingMessageChanged]] event,
   * which is emitted when a [[UseGreetingMessage]] command is received.
   */
-class $name;format="Camel"$Entity extends PersistentEntity {
+class $module;format="Camel"$Entity extends PersistentEntity {
 
-  override type Command = $name;format="Camel"$Command[_]
-  override type Event = $name;format="Camel"$Event
-  override type State = Option[$name;format="Camel"$State]
+  override type Command = $module;format="Camel"$Command[_]
+  override type Event = $module;format="Camel"$Event
+  override type State = Option[$module;format="Camel"$State]
 
   /**
     * The initial state. This is used if there is no snapshotted state to be found.
     */
-  override def initialState: $name;format="Camel"$State = None
+  override def initialState: $module;format="Camel"$State = None
 
   /**
     * An entity can define different behaviours for different states, so the behaviour
     * is a function of the current state to a set of actions.
     */
   override def behavior: Behavior = {
-    case Some($name;format="Camel"$State) => Actions().onCommand[Create$name;format="Camel"$, Done] {
-      case (Create$name;format="Camel"$(name), ctx, state) =>
-        ctx.thenPersist($name;format="Camel"$Created(name)) { _ =>
+    case Some($module;format="Camel"$State) => Actions().onCommand[Create$module;format="Camel"$, Done] {
+      case (Create$module;format="Camel"$(name), ctx, state) =>
+        ctx.thenPersist($module;format="Camel"$Created(name)) { _ =>
           ctx.reply(Done)
         }
     }.onEvent {
-      case ($name;format="Camel"$Created(name), state) =>
-        $name;format="Camel"$State(newMessage, LocalDateTime.now().toString)
+      case ($module;format="Camel"$Created(name), state) =>
+        $module;format="Camel"$State(newMessage, LocalDateTime.now().toString)
 //    }.onReadOnlyCommand[UUID, String] {
 //      case (Hello(name), ctx, state) =>
-//      ctx.reply(s"\$message, \$name!")
+//      ctx.reply(s"\$message, \$module!")
     }
   }
 }
@@ -62,54 +62,54 @@ class $name;format="Camel"$Entity extends PersistentEntity {
 /**
   * The current state held by the persistent entity.
   */
-case class $name;format="Camel"$State(name: String)
+case class $module;format="Camel"$State(name: String)
 
-object $name;format="Camel"$State {
-    implicit val format: Format[$name;format="Camel"$State] = Json.format
+object $module;format="Camel"$State {
+    implicit val format: Format[$module;format="Camel"$State] = Json.format
 }
 
 /**
-  * Events that the $name$ entity supports
+  * Events that the $module$ entity supports
   */
-sealed trait $name;format="Camel"$Event extends AggregateEvent[$name;format="Camel"$Event] {
-  def aggregateTag = $name;format="Camel"$Event.Tag
+sealed trait $module;format="Camel"$Event extends AggregateEvent[$module;format="Camel"$Event] {
+  def aggregateTag = $module;format="Camel"$Event.Tag
 }
 
-object $name;format="Camel"$Event {
-  val Tag = AggregateEventTag[$name;format="Camel"$Event]
-}
-
-/**
-  * An event that records the creation of $name$
-  */
-case class $name;format="Camel"$Created(id: UUID, name: String) extends $name;format="Camel"$Event
-
-object $name;format="Camel"$Created {
-
-  implicit val format: Format[$name;format="Camel"$Created] = Json.format
+object $module;format="Camel"$Event {
+  val Tag = AggregateEventTag[$module;format="Camel"$Event]
 }
 
 /**
-  * Commands that the $name$ entity supports
+  * An event that records the creation of $module$
   */
-sealed trait $name;format="Camel"$Command[R] extends ReplyType[R]
+case class $module;format="Camel"$Created(id: UUID, name: String) extends $module;format="Camel"$Event
 
-/**
-  * A command to create a $name$
-  */
-case class Create$name;format="Camel"$(id UUID, name: String) extends $name;format="Camel"$Command[Done]
+object $module;format="Camel"$Created {
 
-object Create$name;format="Camel"$ {
-  implicit val format: Format[Create$name;format="Camel"$] = Json.format
+  implicit val format: Format[$module;format="Camel"$Created] = Json.format
 }
 
 /**
-  * Serializer registry for $name$
+  * Commands that the $module$ entity supports
   */
-object $name;format="Camel"$SerializerRegistry extends JsonSerializerRegistry {
+sealed trait $module;format="Camel"$Command[R] extends ReplyType[R]
+
+/**
+  * A command to create a $module$
+  */
+case class Create$module;format="Camel"$(id UUID, name: String) extends $module;format="Camel"$Command[Done]
+
+object Create$module;format="Camel"$ {
+  implicit val format: Format[Create$module;format="Camel"$] = Json.format
+}
+
+/**
+  * Serializer registry for $module$
+  */
+object $module;format="Camel"$SerializerRegistry extends JsonSerializerRegistry {
   override def serializers: Seq[JsonSerializer[_]] = Seq(
-    JsonSerializer[$name;format="Camel"$Created],
-    JsonSerializer[Create$name;format="Camel"$],
-    JsonSerializer[$name;format="Camel"$State]
+    JsonSerializer[$module;format="Camel"$Created],
+    JsonSerializer[Create$module;format="Camel"$],
+    JsonSerializer[$module;format="Camel"$State]
   )
 }

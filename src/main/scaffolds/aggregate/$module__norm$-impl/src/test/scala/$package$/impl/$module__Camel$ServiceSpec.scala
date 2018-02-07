@@ -5,20 +5,20 @@ import com.lightbend.lagom.scaladsl.testkit.ServiceTest
 import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
 import $package$.api._
 
-class $name;format="Camel"$ServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
+class $module;format="Camel"$ServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
 
   private val server = ServiceTest.startServer(
     ServiceTest.defaultSetup
       .withCassandra()
   ) { ctx =>
-    new $name;format="Camel"$Application(ctx) with LocalServiceLocator
+    new $module;format="Camel"$Application(ctx) with LocalServiceLocator
   }
 
-  val client = server.serviceClient.implement[$name;format="Camel"$Service]
+  val client = server.serviceClient.implement[$module;format="Camel"$Service]
 
   override protected def afterAll() = server.stop()
 
-  "$name$ service" should {
+  "$module$ service" should {
 
 // replace with sensible tests for expected behavior
 
