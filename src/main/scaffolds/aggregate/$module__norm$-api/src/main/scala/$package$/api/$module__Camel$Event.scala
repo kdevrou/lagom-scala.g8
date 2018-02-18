@@ -1,5 +1,6 @@
 package $package$.api
 
+import play.api.libs.json.{Format, Json}
 import java.util.UUID
 
 sealed trait $module;format="Camel"$Event {

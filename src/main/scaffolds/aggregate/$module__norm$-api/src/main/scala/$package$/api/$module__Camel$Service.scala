@@ -8,7 +8,7 @@ import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import play.api.libs.json.{Format, Json}
 
 object $module;format="Camel"$Service  {
-  val TOPIC_NAME = "greetings"
+  val TOPIC_NAME = "$module;format="norm"$"
 }
 
 /**
@@ -44,8 +44,8 @@ trait $module;format="Camel"$Service extends Service {
         pathCall("/api/$module;format="lower"$", make$module;format="Camel"$ _)
       )
       .withTopics(
-        topic($module;format="Camel"$Service.TOPIC_NAME, $module;format="camel"$Topic)
-          .addProperty(KafkaProperties.partitionKeyStrategy, PartitionKeyStrategy[$module;format="Camel"$Event](_.id))
+        topic($module;format="Camel"$Service.TOPIC_NAME, this.$module;format="camel"$Topic)
+          .addProperty(KafkaProperties.partitionKeyStrategy, PartitionKeyStrategy[$module;format="Camel"$Event](_.id.toString))
       )
       .withAutoAcl(true)
     // @formatter:on
