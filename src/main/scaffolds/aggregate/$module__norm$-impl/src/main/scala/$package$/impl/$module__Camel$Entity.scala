@@ -85,7 +85,6 @@ object $module;format="Camel"$Event {
 case class $module;format="Camel"$Created(id: UUID, name: String) extends $module;format="Camel"$Event
 
 object $module;format="Camel"$Created {
-
   implicit val format: Format[$module;format="Camel"$Created] = Json.format
 }
 
@@ -97,10 +96,18 @@ sealed trait $module;format="Camel"$Command[R] extends ReplyType[R]
 /**
   * A command to create a $module$
   */
-case class Create$module;format="Camel"$(id UUID, name: String) extends $module;format="Camel"$Command[Done]
+case class Create$module;format="Camel"$(id: UUID, name: String) extends $module;format="Camel"$Command[Done]
 
 object Create$module;format="Camel"$ {
   implicit val format: Format[Create$module;format="Camel"$] = Json.format
+}
+/**
+  * A command to get a $module$
+  */
+case class Get$module;format="Camel"$(id : UUID) extends $module;format="Camel"$Command[Done] with ReplyType[Option[$module;format="Camel"$State]]
+
+object Get$module;format="Camel"$ {
+  implicit val format: Format[Get$module;format="Camel"$] = Json.format
 }
 
 /**
