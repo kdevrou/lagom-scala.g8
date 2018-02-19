@@ -42,7 +42,7 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
 
   private def convertEvent($module;format="camel"$Event: EventStreamElement[$module;format="Camel"$Event]): api.$module;format="Camel"$Event = {
     $module;format="camel"$Event match {
-      case $module;format="Camel"$Created(id, name) => api.$module;format="Camel"Created(id, name)
+      case $module;format="Camel"$Created(id, name) => api.$module;format="Camel"$Created(id, name)
     }
   }
 }
