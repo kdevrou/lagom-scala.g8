@@ -15,8 +15,8 @@ object $module;format="Camel"$Event {
 
 // add events here as they should be exposed to clients of the service
 // these will generally be upconverted from similar persistent events
-case class $module;format="Camel"Created(itemId: UUID) extends $module;format="Camel"Event
+case class $module;format="Camel"$Created(itemId: UUID) extends $module;format="Camel"$Event
 
-object $module;format="Camel"Created {
-  implicit val format: Format[$module;format="Camel"Created] = Json.format
+object $module;format="Camel"$Created {
+  implicit val format: Format[$module;format="Camel"$Created] = Json.format
 }
