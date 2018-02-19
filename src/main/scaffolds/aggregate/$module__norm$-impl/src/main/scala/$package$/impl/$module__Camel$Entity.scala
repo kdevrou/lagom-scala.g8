@@ -9,25 +9,6 @@ import play.api.libs.json.{Format, Json}
 
 import scala.collection.immutable.Seq
 
-/**
-  * This is an event sourced entity. It has a state, [[$module;format="Camel"$State]], which
-  * stores what the greeting should be (eg, "Hello").
-  *
-  * Event sourced entities are interacted with by sending them commands. This
-  * entity supports two commands, a [[UseGreetingMessage]] command, which is
-  * used to change the greeting, and a [[Hello]] command, which is a read
-  * only command which returns a greeting to the name specified by the command.
-  *
-  * Commands get translated to events, and it's the events that get persisted by
-  * the entity. Each event will have an event handler registered for it, and an
-  * event handler simply applies an event to the current state. This will be done
-  * when the event is first created, and it will also be done when the entity is
-  * loaded from the database - each event will be replayed to recreate the state
-  * of the entity.
-  *
-  * This entity defines one event, the [[GreetingMessageChanged]] event,
-  * which is emitted when a [[UseGreetingMessage]] command is received.
-  */
 class $module;format="Camel"$Entity extends PersistentEntity {
 
   override type Command = $module;format="Camel"$Command[_]
@@ -37,32 +18,34 @@ class $module;format="Camel"$Entity extends PersistentEntity {
   /**
     * The initial state. This is used if there is no snapshotted state to be found.
     */
-  override def initialState: $module;format="Camel"$State = None
+  override def initialState: Option[$module;format="Camel"$State] = None
 
   /**
     * An entity can define different behaviours for different states, so the behaviour
     * is a function of the current state to a set of actions.
     */
   override def behavior: Behavior = {
-    case Some($module;format="Camel"$State) => Actions().onCommand[Create$module;format="Camel"$, Done] {
-      case (Create$module;format="Camel"$(name), ctx, state) =>
-        ctx.thenPersist($module;format="Camel"$Created(name)) { _ =>
-          ctx.reply(Done)
-        }
-    }.onEvent {
-      case ($module;format="Camel"$Created(name), state) =>
-        $module;format="Camel"$State(newMessage, LocalDateTime.now().toString)
-//    }.onReadOnlyCommand[UUID, String] {
-//      case (Hello(name), ctx, state) =>
-//      ctx.reply(s"\$message, \$module!")
-    }
+    case Some($module;format="Camel"$State) =>
+      Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
+        case (Get$module;format = "Camel" $, ctx, state) => ctx.reply (state)
+      }.onReadOnlyCommand[Create$module;format="Camel"$, Done] {
+        case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.invalidCommand("$module;format="Camel"$ already exists")
+      }
+    case None =>
+      Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
+       case (Get$module;format = "Camel" $, ctx, state) => ctx.reply (state)
+      }.onCommand[Create$module;format="Camel"$, Done] {
+        case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.thenPersist($module;format="Camel"$Created(id, name))(_ => ctx.reply(Done))
+      }.onEvent {
+        case ($module;format="Camel"$Created(id, name), state) => Some($module;format="Camel"$State(id, name))
+      }
   }
 }
 
 /**
   * The current state held by the persistent entity.
   */
-case class $module;format="Camel"$State(name: String)
+case class $module;format="Camel"$State(id: UUID, name: String)
 
 object $module;format="Camel"$State {
     implicit val format: Format[$module;format="Camel"$State] = Json.format
