@@ -27,13 +27,13 @@ class $module;format="Camel"$Entity extends PersistentEntity {
   override def behavior: Behavior = {
     case Some($module;format="camel"$State) =>
       Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
-        case (Get$module;format = "Camel"$(id), ctx, state) => ctx.reply(state)
+        case (Get$module;format = "Camel"$, ctx, state) => ctx.reply(state)
       }.onReadOnlyCommand[Create$module;format="Camel"$, Done] {
         case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.invalidCommand("$module;format="Camel"$ already exists")
       }
     case None =>
       Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
-       case (Get$module;format = "Camel"$(id), ctx, state) => ctx.reply(state)
+       case (Get$module;format = "Camel"$, ctx, state) => ctx.reply(state)
       }.onCommand[Create$module;format="Camel"$, Done] {
         case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.thenPersist($module;format="Camel"$Created(id, name))(_ => ctx.reply(Done))
       }.onEvent {
@@ -87,7 +87,7 @@ object Create$module;format="Camel"$ {
 /**
   * A command to get a $module$
   */
-case class Get$module;format="Camel"$ extends $module;format="Camel"$Command[Done] with ReplyType[Option[$module;format="Camel"$State]] {
+case object Get$module;format="Camel"$ extends $module;format="Camel"$Command[Option[$module;format="Camel"$State]] with ReplyType[Option[$module;format="Camel"$State]] {
   implicit val format: Format[Get$module;format="Camel"$.type] = Json.format
 }
 
