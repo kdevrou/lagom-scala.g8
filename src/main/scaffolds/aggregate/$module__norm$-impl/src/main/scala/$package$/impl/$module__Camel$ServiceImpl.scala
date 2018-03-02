@@ -21,7 +21,10 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
     val ref = persistentEntityRegistry.refFor[$module;format="Camel"$Entity](id.toString)
 
     // Ask the entity the Hello command.
-    ref.ask(Get$module;format="Camel"$(id))
+    ref.ask(Get$module;format="Camel"$).map {
+      case Some($module;format="camel"$) => api.$module;format="Camel"$(Some($module;format="camel"$.id), $module;format="camel"$.name)
+      case None => throw NotFound(s"$module;format="Camel"$ $id, not found")
+    }
   }
 
   override def make$module;format="Camel"$ = ServiceCall { request =>
@@ -29,7 +32,7 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
     val ref = persistentEntityRegistry.refFor[$module;format="Camel"$Entity](request.id.toString)
 
     // Tell the entity to use the greeting message specified.
-    ref.ask(Create$module;format="Camel"$(request.id, request.name))
+    ref.ask(Create$module;format="Camel"$(request.id.get, request.name))
   }
 
   override def $module;format="camel"$Topic(): Topic[api.$module;format="Camel"$Event] =

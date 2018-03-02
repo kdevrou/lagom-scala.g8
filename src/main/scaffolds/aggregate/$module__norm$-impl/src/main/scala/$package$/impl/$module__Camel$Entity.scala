@@ -28,7 +28,7 @@ class $module;format="Camel"$Entity extends PersistentEntity {
     case Some($module;format="camel"$State) =>
       Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
         case (Get$module;format = "Camel"$(id), ctx, state) => ctx.reply(state)
-      }.onCommand[Create$module;format="Camel"$, Done] {
+      }.onReadOnlyCommand[Create$module;format="Camel"$, Done] {
         case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.invalidCommand("$module;format="Camel"$ already exists")
       }
     case None =>
@@ -87,10 +87,8 @@ object Create$module;format="Camel"$ {
 /**
   * A command to get a $module$
   */
-case class Get$module;format="Camel"$(id : UUID) extends $module;format="Camel"$Command[Done] with ReplyType[Option[$module;format="Camel"$State]]
-
-object Get$module;format="Camel"$ {
-  implicit val format: Format[Get$module;format="Camel"$] = Json.format
+case class Get$module;format="Camel"$ extends $module;format="Camel"$Command[Done] with ReplyType[Option[$module;format="Camel"$State]] {
+  implicit val format: Format[Get$module;format="Camel"$.type] = Json.format
 }
 
 /**
