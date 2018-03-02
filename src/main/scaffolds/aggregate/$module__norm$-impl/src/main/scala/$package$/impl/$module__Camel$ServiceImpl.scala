@@ -23,7 +23,7 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
     // Ask the entity the Hello command.
     ref.ask(Get$module;format="Camel"$).map {
       case Some($module;format="camel"$) => api.$module;format="Camel"$(Some($module;format="camel"$.id), $module;format="camel"$.name)
-      case None => throw NotFound(s"$module;format="Camel"$ $id, not found")
+      case None => throw NotFound("not found")
     }
   }
 
