@@ -2,9 +2,8 @@ package $package$.impl
 
 import java.util.UUID
 
-import akka.persistence.query.Offset
 import $package$.api
-import $package$.api.{$module;format="Camel"$, $module;format="Camel"$Created, $module;format="Camel"$Service}
+import $package$.api.{$module;format="Camel"$, $module;format="Camel"$Service}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
