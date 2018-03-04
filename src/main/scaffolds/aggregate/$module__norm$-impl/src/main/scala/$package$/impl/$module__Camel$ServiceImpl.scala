@@ -43,16 +43,13 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
           .map(ev => (convertEvent(ev), ev.offset))
     }
 
-  private def convertEvent($module;format="camel"$Event: EventStreamElement[$module;format="Camel"$Event]): api.$module;format="Camel"$Event = {
-    $module;format="camel"$StreamElement match {
-      case EventStreamElement($module;format="camel"$Id, $module;format="Camel"$Created(id, name), offset) =>
-        Future.successful {
-          api.$module;format="Camel"$Created(id, name), offset
-        }
+  private def convertEvent(eventStreamElement: EventStreamElement[$module;format="Camel"$Event]): api.$module;format="Camel"$Event = {
+    eventStreamElement match {
+      case EventStreamElement($module;format="camel"$Id, $module;format="Camel"$Created(id, name), offset) => api.$module;format="Camel"$Created(id, name)
     }
   }
 
   private def entityRef($module;format="camel"$Id: UUID) = entityRefString($module;format="camel"$Id.toString)
 
-  private def entityRefString($module;format="camel"$Id: String) = registry.refFor[$module;format="Camel"$IdEntity]($module;format="camel"$Id)
+  private def entityRefString($module;format="camel"$Id: String) = persistentEntityRegistry.refFor[$module;format="Camel"$Entity]($module;format="camel"$Id)
 }
