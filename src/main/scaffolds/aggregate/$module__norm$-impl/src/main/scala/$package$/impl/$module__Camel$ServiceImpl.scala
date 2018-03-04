@@ -30,7 +30,7 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
 
   override def make$module;format="Camel"$ = ServiceCall { request =>
     // Look up the $module$ entity for the given ID.
-    val ref = entityRef(request.id)
+    val ref = entityRef(request.id.get)
 
     // Tell the entity to use the greeting message specified.
     ref.ask(Create$module;format="Camel"$(request.id.get, request.name))
