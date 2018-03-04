@@ -45,7 +45,7 @@ class $module;format="Camel"$Entity extends PersistentEntity {
 object $module;format="Camel"$Entity {
   def singletonReads[O](singleton: O): Reads[O] = {
     (__ \ "value").read[String].collect(
-      JsonValidationError(s"Expected a JSON object with a single field with key 'value' and value '${singleton.getClass.getSimpleName}'")
+      JsonValidationError(s"Expected a JSON object with a single field with key 'value' and value '\${singleton.getClass.getSimpleName}'")
     ) {
       case s if s == singleton.getClass.getSimpleName => singleton
     }
