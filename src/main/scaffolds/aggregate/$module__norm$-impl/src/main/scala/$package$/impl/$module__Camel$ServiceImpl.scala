@@ -10,14 +10,16 @@ import com.lightbend.lagom.scaladsl.api.transport.NotFound
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
 import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry}
 
+import scala.concurrent.ExecutionContext
+
 /**
   * Implementation of the $module;format="Camel"$Service.
   */
-class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEntityRegistry) extends $module;format="Camel"$Service {
+class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEntityRegistry)(implicit ec: ExecutionContext) extends $module;format="Camel"$Service {
 
   override def get$module;format="Camel"$(id: UUID) = ServiceCall { _ =>
     // Look up the $module$ entity for the given ID.
-    val ref = persistentEntityRegistry.refFor[$module;format="Camel"$Entity](id.toString)
+    val ref = entityRef(id)
 
     // Ask the entity the Hello command.
     ref.ask(Get$module;format="Camel"$).map {
@@ -28,7 +30,7 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
 
   override def make$module;format="Camel"$ = ServiceCall { request =>
     // Look up the $module$ entity for the given ID.
-    val ref = persistentEntityRegistry.refFor[$module;format="Camel"$Entity](request.id.toString)
+    val ref = entityRef(request.id)
 
     // Tell the entity to use the greeting message specified.
     ref.ask(Create$module;format="Camel"$(request.id.get, request.name))
@@ -42,8 +44,15 @@ class $module;format="Camel"$ServiceImpl(persistentEntityRegistry: PersistentEnt
     }
 
   private def convertEvent($module;format="camel"$Event: EventStreamElement[$module;format="Camel"$Event]): api.$module;format="Camel"$Event = {
-    $module;format="camel"$Event match {
-      case $module;format="Camel"$Created(id, name) => api.$module;format="Camel"$Created(id, name)
+    $module;format="camel"$StreamElement match {
+      case EventStreamElement($module;format="camel"$Id, $module;format="Camel"$Created(id, name), offset) =>
+        Future.successful {
+          api.$module;format="Camel"$Created(id, name), offset
+        }
     }
   }
+
+  private def entityRef($module;format="camel"$Id: UUID) = entityRefString($module;format="camel"$Id.toString)
+
+  private def entityRefString($module;format="camel"$Id: String) = registry.refFor[$module;format="Camel"$IdEntity]($module;format="camel"$Id)
 }

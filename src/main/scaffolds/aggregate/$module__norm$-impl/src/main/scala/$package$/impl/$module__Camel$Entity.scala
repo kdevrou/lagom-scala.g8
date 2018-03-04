@@ -5,7 +5,7 @@ import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, PersistentEntity}
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json._
 
 import scala.collection.immutable.Seq
 
@@ -26,19 +26,35 @@ class $module;format="Camel"$Entity extends PersistentEntity {
     */
   override def behavior: Behavior = {
     case Some($module;format="camel"$State) =>
-      Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
+      Actions().onReadOnlyCommand[Get$module;format="Camel"$.type, Option[$module;format="Camel"$State]] {
         case (Get$module;format = "Camel"$, ctx, state) => ctx.reply(state)
       }.onReadOnlyCommand[Create$module;format="Camel"$, Done] {
         case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.invalidCommand("$module;format="Camel"$ already exists")
       }
     case None =>
-      Actions().onReadOnlyCommand[Create$module;format="Camel"$, Option[$module;format="Camel"$State]] {
+      Actions().onReadOnlyCommand[Get$module;format="Camel"$.type, Option[$module;format="Camel"$State]] {
        case (Get$module;format = "Camel"$, ctx, state) => ctx.reply(state)
       }.onCommand[Create$module;format="Camel"$, Done] {
         case (Create$module;format="Camel"$(id, name), ctx, state) => ctx.thenPersist($module;format="Camel"$Created(id, name))(_ => ctx.reply(Done))
       }.onEvent {
         case ($module;format="Camel"$Created(id, name), state) => Some($module;format="Camel"$State(id, name))
       }
+  }
+}
+
+object $module;format="Camel"$Entity {
+  def singletonReads[O](singleton: O): Reads[O] = {
+    (__ \ "value").read[String].collect(
+      JsonValidationError(s"Expected a JSON object with a single field with key 'value' and value '${singleton.getClass.getSimpleName}'")
+    ) {
+      case s if s == singleton.getClass.getSimpleName => singleton
+    }
+  }
+  def singletonWrites[O]: Writes[O] = Writes { singleton =>
+    Json.obj("value" -> singleton.getClass.getSimpleName)
+  }
+  def singletonFormat[O](singleton: O): Format[O] = {
+    Format(singletonReads(singleton), singletonWrites)
   }
 }
 
@@ -88,7 +104,7 @@ object Create$module;format="Camel"$ {
   * A command to get a $module$
   */
 case object Get$module;format="Camel"$ extends $module;format="Camel"$Command[Option[$module;format="Camel"$State]] with ReplyType[Option[$module;format="Camel"$State]] {
-  implicit val format: Format[Get$module;format="Camel"$.type] = Json.format
+  implicit val format: Format[Get$module;format="Camel"$.type] = $module;format="Camel"$Entity.singletonFormat(Get$module;format="Camel"$)
 }
 
 /**
