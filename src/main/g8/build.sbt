@@ -4,6 +4,7 @@ version in ThisBuild := "$version$"
 // the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.12.4"
 
+val playJsonDerivedCodecs = "org.julienrf" %% "play-json-derived-codecs" % "4.0.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % Test
 
@@ -13,7 +14,8 @@ lazy val `$name;format="norm"$` = (project in file("."))
 lazy val `$name;format="norm"$-api` = (project in file("$name;format="norm"$-api"))
   .settings(
     libraryDependencies ++= Seq(
-      lagomScaladslApi
+      lagomScaladslApi,
+      playJsonDerivedCodecs
     )
   )
 
